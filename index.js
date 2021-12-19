@@ -1,7 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const operaciones = require("./utilis/operaciones")
-let PORT = process.env.PORT || 3000
+const mountRoutes = require('./dbrouters');
+
+let PORT = process.env.PORT
 
 app.use(express.json());
 
@@ -41,10 +44,12 @@ app.post('/factorial', (req, res) => {
     res.send(result)
 })
 
-
+app.use('/media',express.static("public/gestionopin"))
 app.use(express.static("public"));
 
+mountRoutes(app)
+
 app.listen(PORT,()=>{
-    console.log("Conectado Puerto 3000")
+    console.log("Conectado Puerto",PORT)
 })
 
