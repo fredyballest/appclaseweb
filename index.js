@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const operaciones = require("./utilis/operaciones")
-const mountRoutes = require('./dbrouters');
+//const mountRoutes = require('./dbrouters');
 
 let PORT = process.env.PORT
 
@@ -47,7 +47,7 @@ app.post('/factorial', (req, res) => {
 app.use('/media',express.static("public/gestionopin"))
 app.use(express.static("public"));
 
-mountRoutes(app)
+//mountRoutes(app)
 
 app.listen(PORT,()=>{
     console.log("Conectado Puerto",PORT)
