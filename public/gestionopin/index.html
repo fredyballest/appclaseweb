@@ -7,16 +7,97 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
     <script type="text/javascript" src="peticiones.js"></script>
     <title>Gestion Opiniones</title>
   </head>
   <body>
+    <div id="app">
+      {{numero}}
+       
     <div class="container mt-5">
-        <h1>OPINIONES</h1>
-      </div>
+        <h1>{{titulo}}</h1>
+        <div class="row mt-5">
+          <div class="form-group col-3">
+          <select class="form-select" id="ejercicio"  @change="valueHasChanged">
+            <option v-for="(value, index) in opciones" :value="index">{{value}}</option>
+          </select>
+        </div>
 
+        <div class="row mt-5">
+          <div class="form-group col-2">
+            <div class="input-group">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Número</span>
+            <input type="text" class="form-control" id="elnumero" v-model="numero" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          </div>
+          <div class="row mt-5">
+              <div class="form-group col-2"> 
+                <div class="alert alert-info" role="alert" v-text="mensaje"></div>           
+              </div>    
+             </div>
+             <div class="row mt-5">
+              <div class="form-group col-md-2"> 
+                <button type="button" class="btn btn-primary" @click="unapeticion()" >Calcular !!</button>
+              </div>
+               
+            </div>
+    </div>
+    
+  </div>
+     
+    
+    
+    </div>
       
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3.2.26/dist/vue.global.js"></script>
+    <script>
+      const entradaPrincipa = {
+        data() {
+          return {
+            titulo: 'Operaciones Math',
+            opciones : ["","Pares","Serie Factor","Factorial"],
+            endpoints : {
+                            1 : "/pares",
+                            2 : "/seriefactorial",
+                            3 : "/factorial"
+                          },
+            selected : 0,
+            numero : 0,
+            mensaje: "NO HA SELECCIONADO"
+          }
+        },
+        methods: {
+          mostrar(){
+            console.log(this.selected)
+            if(!this.selected){
+              this.mensaje = "SELECCIONADO"
+            }else{
+              this.mensaje = "NO HA SELECCIONADO"
+            }
+           console.log(this.selected)
+          },
+        valueHasChanged(e) {
+                const val = e.target.value
+                this.selected = val
+                console.log(val)
+                  },
+         async unapeticion(){
+           if (this.selected == 0) {
+              this.mensaje = "NO HA SELECCIONADO"
+             return
+           }
+           if (this.numero == 0 || this.numero =="") {
+              this.mensaje = "Problema con el número"
+             return
+           }
 
+          let resp = (await axios.post(this.endpoints[this.selected], {numero: this.numero})).data
+          this.mensaje = resp
+         }         
+             }     
+    }
+      Vue.createApp(entradaPrincipa).mount('#app')
+    </script>
   </body>
 </html>
